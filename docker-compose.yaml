@@ -1,0 +1,81 @@
+version: '3.9'
+
+services:
+  db:
+    restart: always
+    image: ${IMAGE_DB}
+    container_name: 'alizadeh_db'
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-d",
+          "${DB_NAME}",
+          "-U",
+          "${DB_USER}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # pgadmin:
+  #   image: ${IMAGE_PG}
+  #   container_name: 'alizadeh_pgadmin'
+  #   restart: always
+  #   ports:
+  #     - "${PG_PORT:-8888}:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
+  #   volumes:
+  #     - pgadmin_data:/var/lib/pgadmin
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 'Alizadeh_back'
+    restart: always
+    command: >
+      sh -c "
+          python manage.py makemigrations;
+          python manage.py migrate;
+          python manage.py runserver 0.0.0.0:8000;
+        "
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: "service_healthy"
+
+  redis:
+    image: ${IMAGE_REDIS}
+    container_name: 'alizadeh_redis'
+    restart: always
+    ports:
+      - "${REDIS_PORT:-8000}:6379"
+
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
+  dbdata:
+  pgadmin_data:
+

@@ -1,0 +1,10 @@
+from .serializer_page_list import PageListSerializer
+from .serializer_page_detail import PageDetailSerializer
+from .serializer_page_create_update import PageCreateUpdateSerializer
+
+
+from .base_base_info import BaseInfoSerializer
+
+from .serializer_landing_create_update import LandingPageCreateUpdateSerializer
+from .serializer_landing_detail import LandingPageDetailSerializer
+from .serializer_landing_list import LandingPageListSerializer

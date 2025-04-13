@@ -1,0 +1,3 @@
+from .test_model_category import CategoryModelTestCase
+from .test_model_post import PostModelTestCase
+from .test_model_comment import CommentModelTestCase

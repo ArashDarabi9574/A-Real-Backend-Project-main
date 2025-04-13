@@ -1,0 +1,3 @@
+from .test_viewset_category import CategoryViewSetTestCase
+from .test_viewset_post import PostViewSetTestCase
+from .test_viewset_comment import CommentViewSetTestCase

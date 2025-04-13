@@ -24,10 +24,13 @@ The application will be available at:
 
 # Option 2: Local Development Setup
 
-# Create and activate virtual environment
+Create and activate virtual environment
 python -m venv venv
+
 source venv/bin/activate  in Linux/Mac
+
 OR
+
 .\venv\Scripts\activate  in Windows
 
 1 - Make sure you have PostgreSQL installed. Otherwise, you will have to change the database in the .env file. In order to do this, you have to change the 'DB_ENGINE' to either postgresql or sqlite according to your preference.
